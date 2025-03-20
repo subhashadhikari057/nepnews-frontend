@@ -1,10 +1,14 @@
-import NewsList from "../components/NewsList"; // Import NewsList component
+import NewsList from "../components/NewsList"; // Import NewsList
 import AdBanner from "../components/AdBanner"; // Import Ad Space Component
+import FeaturedNewsSlider from "../components/FeaturedNewsSlider"; // Import News Slider
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      {/* Ad Space Above Latest News */}
+      {/* Featured News Slider */}
+      <FeaturedNewsSlider />
+
+      {/* Ad Banner Below Slider */}
       <AdBanner />
 
       {/* Latest News Section */}
