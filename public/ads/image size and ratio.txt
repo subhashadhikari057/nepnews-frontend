@@ -1,0 +1,7 @@
+✅ Recommended Ad Image Size:
+Best Resolution:
+Desktop: 1280x320 px (16:4 ratio)
+Mobile: 800x200 px (16:4 ratio) (optional if you want separate mobile images)
+Aspect Ratio:
+16:4 (Wide Banner Format)
+This ensures the image fully covers the width while maintaining a good height.
