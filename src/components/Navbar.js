@@ -20,11 +20,7 @@ export default function Navbar() {
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolling(true);
-      } else {
-        setScrolling(false);
-      }
+      setScrolling(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -34,13 +30,8 @@ export default function Navbar() {
   // Toggle dark mode
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
-    if (!darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    document.documentElement.classList.toggle("dark", !darkMode);
+    localStorage.setItem("theme", darkMode ? "light" : "dark");
   };
 
   // Handle search submission
@@ -68,24 +59,15 @@ export default function Navbar() {
           <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">
             Home
           </Link>
-          <Link href="/category/national" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">
-            National
-          </Link>
-          <Link href="/category/international" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">
-            International
-          </Link>
-          <Link href="/category/politics" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">
-            Politics
-          </Link>
-          <Link href="/category/sports" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">
-            Sports
-          </Link>
-          <Link href="/category/technology" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">
-            Tech
-          </Link>
-          <Link href="/category/entertainment" className="text-gray-700 dark:text-gray-300 hover:text-blue-500">
-            Entertainment
-          </Link>
+          {["national", "international", "politics", "sports", "technology", "entertainment", "finance"].map((category) => (
+            <Link
+              key={category}
+              href={`/category/${category}`}
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-500 capitalize"
+            >
+              {category}
+            </Link>
+          ))}
         </div>
 
         {/* Search Bar */}

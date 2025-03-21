@@ -1,5 +1,6 @@
 import NewsList from "../components/NewsList"; // Import NewsList
 import AdBanner from "../components/AdBanner"; // Import Ad Space Component
+
 import FeaturedNewsSlider from "../components/FeaturedNewsSlider"; // Import News Slider
 
 export default function Home() {
@@ -9,7 +10,7 @@ export default function Home() {
       <FeaturedNewsSlider />
 
       {/* Ad Banner Below Slider */}
-      <AdBanner />
+      <AdBanner type="home" />  
 
       {/* Latest News Section */}
       <div className="container mx-auto">

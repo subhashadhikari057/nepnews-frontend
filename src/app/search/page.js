@@ -11,7 +11,7 @@ export default function SearchPage() {
   return (
     <main className="min-h-screen bg-gray-100 dark:bg-gray-900">
       {/* Ad Space Above Search Results */}
-      <AdBanner />
+      <AdBanner type="search" />  
 
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white my-6">

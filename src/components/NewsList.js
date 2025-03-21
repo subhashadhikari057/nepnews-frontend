@@ -1,6 +1,8 @@
 "use client"; // Required for Next.js App Router (ensures interactivity)
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+
 
 export default function NewsList({ searchQuery = "" }) {
   const [news, setNews] = useState([]); // News articles
@@ -72,34 +74,36 @@ export default function NewsList({ searchQuery = "" }) {
     <div className="p-6">
       {/* News Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {news.map((article) => (
-          <div
-            key={`${article._id}-${article.title}-${article.createdAt}`} // ✅ stable and unique key
-            className="bg-white shadow-md rounded-lg p-4"
-          >
-            <img
-              src={article.imageUrl}
-              alt={article.title}
-              className="w-full h-40 object-cover rounded-md bg-gray-300"
-            />
-            <h2 className="text-xl font-bold mt-2 text-gray-900">
-              {article.title}
-            </h2>
-            <p className="text-gray-800 mt-1">
-              {article.content
-                ? article.content.length > 300
-                  ? `${article.content.substring(0, 300)}...`
-                  : article.content
-                : "No content available."}
-            </p>
-            <a
-              href={`/news/${article._id}`}
-              className="text-blue-500 hover:underline mt-2 block"
-            >
-              Read More →
-            </a>
-          </div>
-        ))}
+      {news.map((article, index) => {
+  const key = article._id 
+    ? article._id 
+    : `${article.title}-${index}`;
+
+  return (
+    <div key={key} className="bg-white shadow-md rounded-lg p-4">
+      <img
+        src={article.imageUrl}
+        alt={article.title}
+        className="w-full h-40 object-cover rounded-md bg-gray-300"
+      />
+      <h2 className="text-xl font-bold mt-2 text-gray-900">{article.title}</h2>
+      <p className="text-gray-800 mt-1">
+        {article.content
+          ? article.content.length > 300
+            ? `${article.content.substring(0, 300)}...`
+            : article.content
+          : "No content available."}
+      </p>
+      <Link
+        href={`/news/${article._id}`}
+        className="text-blue-500 hover:underline mt-2 block"
+      >
+        Read More →
+      </Link>
+    </div>
+  );
+})}
+
       </div>
 
       {/* Load More Button */}
