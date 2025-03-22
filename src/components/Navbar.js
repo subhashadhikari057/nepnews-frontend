@@ -8,6 +8,7 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [scrolling, setScrolling] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showMenu, setShowMenu] = useState(false); // Mobile menu toggle
   const router = useRouter();
 
   // Handle scroll effect
@@ -15,7 +16,6 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolling(window.scrollY > 50);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -26,6 +26,11 @@ export default function Navbar() {
     if (searchQuery.trim()) {
       router.push(`/search?query=${searchQuery}`);
     }
+  };
+
+  // Toggle mobile menu visibility
+  const toggleMenu = () => {
+    setShowMenu((prev) => !prev);
   };
 
   return (
@@ -40,7 +45,15 @@ export default function Navbar() {
           NepNews 📰
         </Link>
 
-        {/* Nav Links */}
+        {/* Hamburger Icon for Mobile (visible on small screens only) */}
+        <div className="flex md:hidden">
+          <button onClick={toggleMenu} className="text-gray-800 focus:outline-none">
+            {/* Simple hamburger icon (you can replace with an SVG/icon library) */}
+            ☰
+          </button>
+        </div>
+
+        {/* Nav Links (visible on md and above) */}
         <div className="hidden md:flex flex-wrap items-center space-x-4 lg:space-x-6">
           <Link href="/" className="text-gray-800 hover:text-blue-600">
             Home
@@ -109,6 +122,35 @@ export default function Navbar() {
             </>
           )}
         </div>
+
+        {/* Mobile Menu: Category Links (visible when showMenu is true) */}
+        {showMenu && (
+          <div className="w-full md:hidden mt-4">
+            <div className="flex flex-col items-start space-y-2 px-2">
+              <Link href="/" className="text-gray-800 hover:text-blue-600">
+                Home
+              </Link>
+              {[
+                "national",
+                "international",
+                "politics",
+                "sports",
+                "technology",
+                "entertainment",
+                "finance",
+              ].map((category) => (
+                <Link
+                  key={category}
+                  href={`/category/${category}`}
+                  className="text-gray-800 hover:text-blue-600 capitalize"
+                  onClick={() => setShowMenu(false)} // close menu after selection
+                >
+                  {category}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
