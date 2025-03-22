@@ -28,21 +28,26 @@ export default function NewsList({ searchQuery = "" }) {
       if (searchQuery) {
         url += `&search=${searchQuery}`;
       }
-
+  
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch news");
       }
-
+  
       const data = await response.json();
-
+  
+      // ✅ Add these logs to inspect what’s coming in
+      console.log("Fetching page:", pageNum);
+      console.log("New news titles:", data.map(item => item.title));
+      console.log("News count before:", news.length);
+  
       if (data.length === 0) {
         setHasMore(false);
       }
-
+  
       setNews((prevNews) => {
-        const existingIds = new Set(prevNews.map((item) => item._id));
-        const uniqueNews = data.filter((item) => !existingIds.has(item._id));
+        const existingSlugs = new Set(prevNews.map((item) => item.slug));
+        const uniqueNews = data.filter((item) => !existingSlugs.has(item.slug));
         const combined = reset ? [...data] : [...prevNews, ...uniqueNews];
         return combined.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       });
@@ -52,12 +57,16 @@ export default function NewsList({ searchQuery = "" }) {
       setLoading(false);
     }
   };
+  
 
   const handleLoadMore = () => {
     const nextPage = page + 1;
+    console.log("Loading more... Next page:", nextPage);
+    fetchNews(nextPage); // data is inside this function only
     setPage(nextPage);
-    fetchNews(nextPage);
   };
+  
+  
 
   if (loading && news.length === 0) {
     return <p className="text-center text-gray-500">Loading news...</p>;
