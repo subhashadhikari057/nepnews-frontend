@@ -6,12 +6,35 @@ import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [userRole, setUserRole] = useState('');
   const [scrolling, setScrolling] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showMenu, setShowMenu] = useState(false); // Mobile menu toggle
+  const [showDropdown, setShowDropdown] = useState(false); // Profile dropdown
   const router = useRouter();
 
-  // Handle scroll effect
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const name = localStorage.getItem('name');
+    const role = localStorage.getItem('role');
+
+    if (token) {
+      setIsLoggedIn(true);
+      setUserName(name || '');
+      setUserRole(role || '');
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    setUserName('');
+    setUserRole('');
+    setShowDropdown(false);
+    router.push('/');
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolling(window.scrollY > 50);
@@ -20,7 +43,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Handle search submission
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -28,9 +50,12 @@ export default function Navbar() {
     }
   };
 
-  // Toggle mobile menu visibility
   const toggleMenu = () => {
     setShowMenu((prev) => !prev);
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev);
   };
 
   return (
@@ -45,27 +70,19 @@ export default function Navbar() {
           NepNews 📰
         </Link>
 
-        {/* Hamburger Icon for Mobile (visible on small screens only) */}
+        {/* Hamburger Icon for Mobile */}
         <div className="flex md:hidden">
           <button onClick={toggleMenu} className="text-gray-800 focus:outline-none">
-            {/* Simple hamburger icon (you can replace with an SVG/icon library) */}
             ☰
           </button>
         </div>
 
-        {/* Nav Links (visible on md and above) */}
+        {/* Nav Links */}
         <div className="hidden md:flex flex-wrap items-center space-x-4 lg:space-x-6">
-          <Link href="/" className="text-gray-800 hover:text-blue-600">
-            Home
-          </Link>
+          <Link href="/" className="text-gray-800 hover:text-blue-600">Home</Link>
           {[
-            "national",
-            "international",
-            "politics",
-            "sports",
-            "technology",
-            "entertainment",
-            "finance",
+            "national", "international", "politics",
+            "sports", "technology", "entertainment", "finance",
           ].map((category) => (
             <Link
               key={category}
@@ -91,23 +108,38 @@ export default function Navbar() {
           </button>
         </form>
 
-        {/* Right Section (Login/Profile) */}
+        {/* Right Section */}
         <div className="flex items-center space-x-4 mt-2 md:mt-0">
           {isLoggedIn ? (
-            <>
-              <Link href="/collections" className="text-gray-800 hover:text-blue-600">
-                📌 Collections
-              </Link>
-              <Link href="/profile" className="text-gray-800 hover:text-blue-600">
-                👤 Profile
-              </Link>
-              <button
-                onClick={() => setIsLoggedIn(false)}
-                className="text-red-500 hover:text-red-700"
-              >
-                Logout
+            <div className="relative">
+              <button onClick={toggleDropdown} className="text-gray-800 hover:text-blue-600">
+                👤 {userName.split(" ")[0]}
               </button>
-            </>
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 bg-white border rounded shadow-md w-40 z-10">
+                  <Link
+                    href={`/${userRole}/dashboard`}
+                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <>
               <Link href="/login" className="text-gray-800 hover:text-blue-600">
@@ -123,27 +155,20 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu: Category Links (visible when showMenu is true) */}
+        {/* Mobile Menu */}
         {showMenu && (
           <div className="w-full md:hidden mt-4">
             <div className="flex flex-col items-start space-y-2 px-2">
-              <Link href="/" className="text-gray-800 hover:text-blue-600">
-                Home
-              </Link>
+              <Link href="/" className="text-gray-800 hover:text-blue-600">Home</Link>
               {[
-                "national",
-                "international",
-                "politics",
-                "sports",
-                "technology",
-                "entertainment",
-                "finance",
+                "national", "international", "politics",
+                "sports", "technology", "entertainment", "finance",
               ].map((category) => (
                 <Link
                   key={category}
                   href={`/category/${category}`}
                   className="text-gray-800 hover:text-blue-600 capitalize"
-                  onClick={() => setShowMenu(false)} // close menu after selection
+                  onClick={() => setShowMenu(false)}
                 >
                   {category}
                 </Link>
