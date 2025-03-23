@@ -12,7 +12,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // ⬅️ NEW
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Navbar() {
         setIsLoggedIn(false);
       }
 
-      setIsLoading(false); // ⬅️ Mark loading complete
+      setIsLoading(false);
     };
 
     checkLogin();
@@ -126,6 +126,15 @@ export default function Navbar() {
                 </button>
                 {showDropdown && (
                   <div className="absolute right-0 mt-2 bg-white border rounded shadow-md w-40 z-10">
+                    {(userRole === 'admin' || userRole === 'editor') && (
+                      <Link
+                        href={`/${userRole}/dashboard`}
+                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                        onClick={() => setShowDropdown(false)}
+                      >
+                        Dashboard
+                      </Link>
+                    )}
                     <Link
                       href="/profile"
                       className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"

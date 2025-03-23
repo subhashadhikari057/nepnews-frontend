@@ -33,6 +33,7 @@ export default function LoginPage() {
       if (res.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('name', data.name);
+        localStorage.setItem('email', data.email || formData.email);
         localStorage.setItem('role', data.role);
         localStorage.setItem('userId', data.userId);
 

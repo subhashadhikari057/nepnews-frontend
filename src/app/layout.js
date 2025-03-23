@@ -1,5 +1,6 @@
 import "./globals.css";
-import Navbar from "../components/Navbar"; // Import Navbar
+import Navbar from "../components/Navbar"; // ✅ Navbar
+import Footer from "../components/Footer"; // ✅ Footer
 
 export const metadata = {
   title: "NepNews",
@@ -9,9 +10,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <Navbar /> {/* Navbar Added Here */}
-        <main>{children}</main>
+      <body className="min-h-screen flex flex-col justify-between">
+        <Navbar /> {/* ✅ Navbar at the top */}
+
+        <main className="flex-grow">{children}</main> {/* Content in between */}
+
+        <Footer /> {/* ✅ Footer at the bottom */}
       </body>
     </html>
   );

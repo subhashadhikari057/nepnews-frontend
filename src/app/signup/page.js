@@ -35,6 +35,7 @@ export default function SignupPage() {
       if (res.ok) {
         localStorage.setItem('token', 'dummy-token');
         localStorage.setItem('name', formData.name);
+        localStorage.setItem('email', data.email || formData.email);
         localStorage.setItem('role', 'reader');
         localStorage.setItem('userId', 'dummy-id');
 
