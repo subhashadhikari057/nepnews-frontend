@@ -2,8 +2,9 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import AdBanner from "@/components/AdBanner"; // ✅ Importing enhanced AdBanner
+import AdBanner from "@/components/AdBanner";
 
 export default function CategoryPage() {
   const { category } = useParams();
@@ -18,7 +19,6 @@ export default function CategoryPage() {
       try {
         const response = await fetch(`http://localhost:8080/api/news/category/${category}`);
         if (!response.ok) throw new Error("Failed to fetch news.");
-
         const data = await response.json();
         setNews(data);
       } catch (err) {
@@ -31,13 +31,14 @@ export default function CategoryPage() {
     fetchNewsByCategory();
   }, [category]);
 
-  if (loading) return <p className="text-center text-gray-500">Loading news...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  if (loading) return <p className="text-center text-gray-500 py-10">Loading news...</p>;
+  if (error) return <p className="text-center text-red-500 py-10">{error}</p>;
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
       <Navbar />
-      <AdBanner type={category} /> {/* ✅ Show category-specific ad */}
+      <AdBanner type={category} />
+
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center capitalize">
           {category} News 📰
@@ -60,9 +61,12 @@ export default function CategoryPage() {
                     : article.content
                   : "No content available."}
               </p>
-              <a href={`/news/${article._id}`} className="text-blue-500 hover:underline mt-2 block">
+              <Link
+                href={`/news/${article.slug}`}
+                className="text-blue-500 hover:underline mt-2 block"
+              >
                 Read More →
-              </a>
+              </Link>
             </div>
           ))}
         </div>
