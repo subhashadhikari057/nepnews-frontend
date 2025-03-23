@@ -10,20 +10,33 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState('');
   const [scrolling, setScrolling] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showMenu, setShowMenu] = useState(false); // Mobile menu toggle
-  const [showDropdown, setShowDropdown] = useState(false); // Profile dropdown
+  const [showMenu, setShowMenu] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // ⬅️ NEW
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const name = localStorage.getItem('name');
-    const role = localStorage.getItem('role');
+    const checkLogin = () => {
+      const token = localStorage.getItem('token');
+      const name = localStorage.getItem('name');
+      const role = localStorage.getItem('role');
 
-    if (token) {
-      setIsLoggedIn(true);
-      setUserName(name || '');
-      setUserRole(role || '');
-    }
+      if (token) {
+        setIsLoggedIn(true);
+        setUserName(name || '');
+        setUserRole(role || '');
+      } else {
+        setIsLoggedIn(false);
+      }
+
+      setIsLoading(false); // ⬅️ Mark loading complete
+    };
+
+    checkLogin();
+    window.addEventListener('userLoggedIn', checkLogin);
+    return () => {
+      window.removeEventListener('userLoggedIn', checkLogin);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -50,13 +63,8 @@ export default function Navbar() {
     }
   };
 
-  const toggleMenu = () => {
-    setShowMenu((prev) => !prev);
-  };
-
-  const toggleDropdown = () => {
-    setShowDropdown((prev) => !prev);
-  };
+  const toggleMenu = () => setShowMenu((prev) => !prev);
+  const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
   return (
     <nav
@@ -70,14 +78,14 @@ export default function Navbar() {
           NepNews 📰
         </Link>
 
-        {/* Hamburger Icon for Mobile */}
+        {/* Hamburger Icon */}
         <div className="flex md:hidden">
           <button onClick={toggleMenu} className="text-gray-800 focus:outline-none">
             ☰
           </button>
         </div>
 
-        {/* Nav Links */}
+        {/* Desktop Nav Links */}
         <div className="hidden md:flex flex-wrap items-center space-x-4 lg:space-x-6">
           <Link href="/" className="text-gray-800 hover:text-blue-600">Home</Link>
           {[
@@ -108,52 +116,47 @@ export default function Navbar() {
           </button>
         </form>
 
-        {/* Right Section */}
-        <div className="flex items-center space-x-4 mt-2 md:mt-0">
-          {isLoggedIn ? (
-            <div className="relative">
-              <button onClick={toggleDropdown} className="text-gray-800 hover:text-blue-600">
-                👤 {userName.split(" ")[0]}
-              </button>
-              {showDropdown && (
-                <div className="absolute right-0 mt-2 bg-white border rounded shadow-md w-40 z-10">
-                  <Link
-                    href={`/${userRole}/dashboard`}
-                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <>
-              <Link href="/login" className="text-gray-800 hover:text-blue-600">
-                Login
-              </Link>
-              <Link
-                href="/signup"
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-              >
-                Sign Up
-              </Link>
-            </>
-          )}
-        </div>
+        {/* Right Section: Profile or Login/Signup */}
+        {!isLoading && (
+          <div className="flex items-center space-x-4 mt-2 md:mt-0">
+            {isLoggedIn ? (
+              <div className="relative">
+                <button onClick={toggleDropdown} className="text-gray-800 hover:text-blue-600">
+                  👤 {userName.split(" ")[0]}
+                </button>
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 bg-white border rounded shadow-md w-40 z-10">
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link href="/login" className="text-gray-800 hover:text-blue-600">
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Mobile Menu */}
         {showMenu && (
