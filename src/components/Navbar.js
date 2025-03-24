@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import NepalTimeBar from "./NepalTimeBar"; // ✅ Live time bar
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -74,8 +76,14 @@ export default function Navbar() {
     >
       <div className="container mx-auto flex flex-wrap justify-between items-center px-6">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold text-blue-600">
-          NepNews 📰
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/ads/logo.png"
+            alt="NepNews Logo"
+            width={150} // Adjust size as needed
+            height={50} // Adjust size as needed
+            priority
+          />
         </Link>
 
         {/* Hamburger Icon */}
@@ -88,10 +96,7 @@ export default function Navbar() {
         {/* Desktop Nav Links */}
         <div className="hidden md:flex flex-wrap items-center space-x-4 lg:space-x-6">
           <Link href="/" className="text-gray-800 hover:text-blue-600">Home</Link>
-          {[
-            "national", "international", "politics",
-            "sports", "technology", "entertainment", "finance",
-          ].map((category) => (
+          {["national", "international", "politics", "sports", "technology", "entertainment", "finance"].map((category) => (
             <Link
               key={category}
               href={`/category/${category}`}
@@ -126,7 +131,7 @@ export default function Navbar() {
                 </button>
                 {showDropdown && (
                   <div className="absolute right-0 mt-2 bg-white border rounded shadow-md w-40 z-10">
-                    {(userRole === 'admin' || userRole === 'editor') && (
+                    {(userRole === 'ADMIN' || userRole === 'EDITOR'|| userRole=='AUTHOR') && (
                       <Link
                         href={`/${userRole}/dashboard`}
                         className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
@@ -166,29 +171,9 @@ export default function Navbar() {
             )}
           </div>
         )}
-
-        {/* Mobile Menu */}
-        {showMenu && (
-          <div className="w-full md:hidden mt-4">
-            <div className="flex flex-col items-start space-y-2 px-2">
-              <Link href="/" className="text-gray-800 hover:text-blue-600">Home</Link>
-              {[
-                "national", "international", "politics",
-                "sports", "technology", "entertainment", "finance",
-              ].map((category) => (
-                <Link
-                  key={category}
-                  href={`/category/${category}`}
-                  className="text-gray-800 hover:text-blue-600 capitalize"
-                  onClick={() => setShowMenu(false)}
-                >
-                  {category}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
+      {/* 🔵 Live Nepal Time under navbar */}
+      <NepalTimeBar />
     </nav>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -8,7 +9,12 @@ export default function Footer() {
       <div className="container mx-auto px-6 py-10 flex flex-col md:flex-row justify-between">
         {/* About */}
         <div className="mb-6 md:mb-0">
-          <h3 className="text-xl font-semibold mb-2">NepNews 📰</h3>
+          <Image
+            src="/ads/logo.png" // Path to your logo in public/ads folder
+            alt="NepNews Logo"
+            width={150} // Adjust width as needed
+            height={50} // Adjust height as needed
+          />
           <p className="text-sm text-gray-300 max-w-xs">
             Trusted Nepali news platform bringing you the latest headlines, stories, and analysis.
           </p>
@@ -42,7 +48,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="border-t border-white border-opacity-20 text-center py-4 text-sm text-gray-300">
-        &copy; {new Date().getFullYear()} NepNews. All rights reserved.
+        &copy; {new Date().getFullYear()} <span className="font-semibold">NepNews</span>. All rights reserved.
       </div>
     </footer>
   );
