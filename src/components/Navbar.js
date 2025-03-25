@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import NepalTimeBar from "./NepalTimeBar"; // ✅ Live time bar
+import dynamic from "next/dynamic";
+
+// ✅ Load NepalTimeBar only on client (avoids hydration error)
+const NepalTimeBar = dynamic(() => import("./NepalTimeBar"), { ssr: false });
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,9 +39,15 @@ export default function Navbar() {
 
     checkLogin();
     window.addEventListener('userLoggedIn', checkLogin);
-    return () => {
-      window.removeEventListener('userLoggedIn', checkLogin);
+    return () => window.removeEventListener('userLoggedIn', checkLogin);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolling(window.scrollY > 50);
     };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleLogout = () => {
@@ -49,14 +58,6 @@ export default function Navbar() {
     setShowDropdown(false);
     router.push('/');
   };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolling(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -69,19 +70,15 @@ export default function Navbar() {
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolling ? "shadow-md py-3" : "py-5"
-      } bg-white`}
-    >
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolling ? "shadow-md py-3" : "py-5"} bg-white`}>
       <div className="container mx-auto flex flex-wrap justify-between items-center px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
             src="/ads/logo.png"
             alt="NepNews Logo"
-            width={150} // Adjust size as needed
-            height={50} // Adjust size as needed
+            width={150}
+            height={50}
             priority
           />
         </Link>
@@ -116,12 +113,10 @@ export default function Navbar() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button type="submit" className="absolute right-2 top-1 text-gray-600">
-            🔍
-          </button>
+          <button type="submit" className="absolute right-2 top-1 text-gray-600">🔍</button>
         </form>
 
-        {/* Right Section: Profile or Login/Signup */}
+        {/* Right Section */}
         {!isLoading && (
           <div className="flex items-center space-x-4 mt-2 md:mt-0">
             {isLoggedIn ? (
@@ -131,9 +126,9 @@ export default function Navbar() {
                 </button>
                 {showDropdown && (
                   <div className="absolute right-0 mt-2 bg-white border rounded shadow-md w-40 z-10">
-                    {(userRole === 'ADMIN' || userRole === 'EDITOR'|| userRole=='AUTHOR') && (
+                    {(userRole === 'ADMIN' || userRole === 'EDITOR' || userRole === 'AUTHOR') && (
                       <Link
-                        href={`/${userRole}/dashboard`}
+                        href={`/${userRole.toLowerCase()}/dashboard`}
                         className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
                         onClick={() => setShowDropdown(false)}
                       >
@@ -158,21 +153,15 @@ export default function Navbar() {
               </div>
             ) : (
               <>
-                <Link href="/login" className="text-gray-800 hover:text-blue-600">
-                  Login
-                </Link>
-                <Link
-                  href="/signup"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                >
-                  Sign Up
-                </Link>
+                <Link href="/login" className="text-gray-800 hover:text-blue-600">Login</Link>
+                <Link href="/signup" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Sign Up</Link>
               </>
             )}
           </div>
         )}
       </div>
-      {/* 🔵 Live Nepal Time under navbar */}
+
+      {/* ✅ Live Nepal Time (Client-only, below navbar) */}
       <NepalTimeBar />
     </nav>
   );
