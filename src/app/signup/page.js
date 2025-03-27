@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -33,21 +34,24 @@ export default function SignupPage() {
       const message = await res.text();
 
       if (res.ok) {
-        localStorage.setItem('token', 'dummy-token');
+        // ✅ Store dummy values for now
+        localStorage.setItem('token', 'dummy-token'); // Replace with actual token if implemented
         localStorage.setItem('name', formData.name);
-        localStorage.setItem('email', data.email || formData.email);
+        localStorage.setItem('email', formData.email);
         localStorage.setItem('role', 'reader');
         localStorage.setItem('userId', 'dummy-id');
 
-        // 🔔 Dispatch login event for Navbar to update instantly
+        // ✅ Notify navbar to update
         window.dispatchEvent(new Event('userLoggedIn'));
 
-        router.push('/');
+        // ✅ Show success message
+        setMessage('✅ Successfully registered! Redirecting...');
+
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
       } else {
         setMessage(message || 'Signup failed.');
-        if (message.toLowerCase().includes('already')) {
-          setTimeout(() => router.push('/'), 2000);
-        }
       }
     } catch (error) {
       console.error('Signup error:', error);
@@ -127,7 +131,15 @@ export default function SignupPage() {
             Create an account
           </button>
 
-          {message && <p className="text-center text-sm text-red-500">{message}</p>}
+          {message && (
+            <p
+              className={`text-center text-sm mt-2 ${
+                message.startsWith('✅') ? 'text-green-600' : 'text-red-500'
+              }`}
+            >
+              {message}
+            </p>
+          )}
         </form>
       </div>
     </div>
