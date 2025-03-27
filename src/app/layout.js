@@ -1,21 +1,21 @@
-import "./globals.css";
-import Navbar from "../components/Navbar"; // ✅ Navbar
-import Footer from "../components/Footer"; // ✅ Footer
+import './globals.css';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import ToastProvider from '../components/ToastProvider'; // ✅ Use wrapper
 
 export const metadata = {
-  title: "NepNews",
-  description: "Stay updated with the latest news.",
+  title: 'NepNews',
+  description: 'Stay updated with the latest news.',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col justify-between">
-        <Navbar /> {/* ✅ Navbar at the top */}
-
-        <main className="flex-grow">{children}</main> {/* Content in between */}
-
-        <Footer /> {/* ✅ Footer at the bottom */}
+        <Navbar />
+        <ToastProvider /> {/* ✅ Now client-safe */}
+        <main className="flex-grow">{children}</main>
+        <Footer />
       </body>
     </html>
   );
