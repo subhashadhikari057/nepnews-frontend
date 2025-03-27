@@ -95,27 +95,45 @@ export default function EditDraftPage() {
   if (loading || !formData) return <p className="p-4">⏳ Loading draft...</p>;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4">
-      {['title', 'imageUrl', 'category', 'keywords'].map((field) => (
-        <input
-          key={field}
-          name={field}
-          value={formData[field]}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          placeholder={field}
-          required
-        />
-      ))}
-      <textarea
-        name="content"
-        value={formData.content}
-        onChange={handleChange}
-        rows="5"
-        className="w-full p-2 border rounded"
-        placeholder="Content"
-        required
-      />
+    <form onSubmit={handleSubmit} className="space-y-4 p-4 pt-40">
+      <h1 className="text-3xl font-bold mb-4">📝 Edit Your Draft</h1>
+      {[
+  { name: 'title', label: 'Title' },
+  { name: 'imageUrl', label: 'Image URL' },
+  { name: 'category', label: 'Category' },
+  { name: 'keywords', label: 'Keywords (comma separated)' },
+].map(({ name, label }) => (
+  <div key={name}>
+    <label htmlFor={name} className="block font-medium mb-1">
+      {label}:
+    </label>
+    <input
+      id={name}
+      name={name}
+      value={formData[name]}
+      onChange={handleChange}
+      className="w-full p-2 border rounded"
+      placeholder={label}
+      required
+    />
+  </div>
+))}
+
+<div>
+  <label htmlFor="content" className="block font-medium mb-1">
+    Content:
+  </label>
+  <textarea
+    id="content"
+    name="content"
+    placeholder="Content"
+    value={formData.content}
+    onChange={handleChange}
+    className="w-full p-2 border rounded"
+    rows="5"
+    required
+  />
+</div>
       <button
         type="submit"
         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"

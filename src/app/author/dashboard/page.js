@@ -15,7 +15,7 @@ export default function AuthorDashboard() {
   if (!userId) return <p>Loading...</p>;
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
+    <div className="pt-30 p-4 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">📝 Author Dashboard</h1>
 
       <div className="mb-6">

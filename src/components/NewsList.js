@@ -24,7 +24,7 @@ export default function NewsList({ searchQuery = "" }) {
 
   const fetchNews = async (pageNum, reset = false) => {
     try {
-      let url = `http://localhost:8080/api/news?page=${pageNum}&limit=6`;
+      let url = `http://localhost:8080/api/news/published?page=${pageNum}&limit=6`;
       if (searchQuery) {
         url += `&search=${searchQuery}`;
       }
