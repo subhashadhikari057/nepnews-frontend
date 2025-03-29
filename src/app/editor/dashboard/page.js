@@ -2,12 +2,44 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast'; // ✅ Toast added
 
 export default function EditorDashboard() {
   const [drafts, setDrafts] = useState([]);
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  // ✅ Custom confirmation toast
+  const confirmAction = (message) => {
+    return new Promise((resolve) => {
+      toast.custom((t) => (
+        <div className="bg-white p-4 rounded shadow-md border flex flex-col gap-3 max-w-sm">
+          <p className="text-gray-800 font-medium">{message}</p>
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                resolve(false);
+              }}
+              className="px-3 py-1 text-sm rounded border text-gray-700 hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                resolve(true);
+              }}
+              className="px-3 py-1 text-sm rounded bg-blue-600 text-white hover:bg-blue-700"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      ));
+    });
+  };
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -31,10 +63,10 @@ export default function EditorDashboard() {
           const data = await res.json();
           setDrafts(data);
         } else {
-          console.error('❌ Failed to fetch drafts');
+          toast.error('❌ Failed to fetch drafts');
         }
       } catch (err) {
-        console.error('⚠️ Error fetching drafts:', err);
+        toast.error('⚠️ Error fetching drafts');
       } finally {
         setLoading(false);
       }
@@ -44,7 +76,8 @@ export default function EditorDashboard() {
   }, [token]);
 
   const handlePublish = async (slug) => {
-    if (!confirm('Publish this news?')) return;
+    const confirmed = await confirmAction('Publish this news?');
+    if (!confirmed) return;
 
     try {
       const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, {
@@ -57,19 +90,20 @@ export default function EditorDashboard() {
       });
 
       if (res.ok) {
-        alert('✅ Published!');
+        toast.success('✅ Published!');
         setDrafts((prev) => prev.filter((d) => d.slug !== slug));
       } else {
-        alert('❌ Failed to publish');
+        toast.error('❌ Failed to publish');
       }
     } catch (err) {
-      console.error(err);
+      toast.error('⚠️ Error publishing news');
     }
   };
 
   const handleDelete = async (slug) => {
-    if (!confirm('Delete this news?')) return;
-  
+    const confirmed = await confirmAction('Delete this news?');
+    if (!confirmed) return;
+
     try {
       const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, {
         method: 'DELETE',
@@ -77,20 +111,18 @@ export default function EditorDashboard() {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (res.ok) {
-        alert('🗑️ Deleted!');
+        toast.success('🗑️ Deleted!');
         setDrafts((prev) => prev.filter((d) => d.slug !== slug));
       } else {
         const msg = await res.text();
-        console.error('❌ Delete failed:', msg);
-        alert('❌ Failed to delete: ' + msg);
+        toast.error('❌ Failed to delete: ' + msg);
       }
     } catch (err) {
-      console.error(err);
+      toast.error('⚠️ Error deleting news');
     }
   };
-  
 
   if (loading) return <p className="p-4">⏳ Loading drafts...</p>;
 

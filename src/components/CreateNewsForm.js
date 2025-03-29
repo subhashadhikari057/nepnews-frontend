@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function CreateNewsForm({ userId }) {
   const [formData, setFormData] = useState({
@@ -30,9 +31,8 @@ export default function CreateNewsForm({ userId }) {
     e.preventDefault();
 
     const token = localStorage.getItem('token');
-
     if (!token || !authorName || !userId) {
-      alert('Missing user information. Please log in again.');
+      toast.error('Missing user information. Please log in again.', { duration: 5000 });
       return;
     }
 
@@ -43,8 +43,10 @@ export default function CreateNewsForm({ userId }) {
         .map((kw) => kw.trim())
         .filter((kw) => kw.length > 0),
       authorName,
-      status: 'draft',
+      status: 'DRAFT',
     };
+
+    const toastId = toast.loading('Saving your draft...');
 
     try {
       const res = await fetch('http://localhost:8080/api/news', {
@@ -57,7 +59,9 @@ export default function CreateNewsForm({ userId }) {
       });
 
       if (res.ok) {
-        alert('✅ Draft created!');
+        toast.success('✅ Draft created successfully!', { id: toastId, duration: 5000 });
+
+        // Clear form
         setFormData({
           title: '',
           content: '',
@@ -66,19 +70,19 @@ export default function CreateNewsForm({ userId }) {
           keywords: '',
         });
 
-        // ✅ Refresh page (if on same route)
-        window.location.reload();
-
-        // ✅ OR redirect to drafts page:
-        // router.push('/author');
+        // Refresh or redirect
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000); // delay by 2 seconds
+        
       } else {
         const errorText = await res.text();
         console.error('❌ Draft creation failed:', errorText);
-        alert('❌ Failed to create draft. See console for details.');
+        toast.error('❌ Failed to create draft. See console for details.', { id: toastId, duration: 5000 });
       }
     } catch (error) {
       console.error('🚨 Error submitting draft:', error);
-      alert('An unexpected error occurred.');
+      toast.error('An unexpected error occurred.', { id: toastId, duration: 5000 });
     }
   };
 
@@ -87,45 +91,46 @@ export default function CreateNewsForm({ userId }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {[
-  { name: 'title', label: 'Title' },
-  { name: 'imageUrl', label: 'Image URL' },
-  { name: 'category', label: 'Category' },
-  { name: 'keywords', label: 'Keywords (comma separated)' },
-].map(({ name, label }) => (
-  <div key={name}>
-    <label htmlFor={name} className="block font-medium mb-1">
-      {label}:
-    </label>
-    <input
-      id={name}
-      name={name}
-      value={formData[name]}
-      onChange={handleChange}
-      className="w-full p-2 border rounded"
-      placeholder={label}
-      required
-    />
-  </div>
-))}
+        { name: 'title', label: 'Title' },
+        { name: 'imageUrl', label: 'Image URL' },
+        { name: 'category', label: 'Category' },
+        { name: 'keywords', label: 'Keywords (comma separated)' },
+      ].map(({ name, label }) => (
+        <div key={name}>
+          <label htmlFor={name} className="block font-medium mb-1">
+            {label}:
+          </label>
+          <input
+            id={name}
+            name={name}
+            value={formData[name]}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            placeholder={label}
+            required
+          />
+        </div>
+      ))}
+
       <div>
-  <label htmlFor="content" className="block font-medium mb-1">
-    Content:
-  </label>
-  <textarea
-    id="content"
-    name="content"
-    placeholder="Content"
-    value={formData.content}
-    onChange={handleChange}
-    className="w-full p-2 border rounded"
-    rows="5"
-    required
-  />
-</div>
+        <label htmlFor="content" className="block font-medium mb-1">
+          Content:
+        </label>
+        <textarea
+          id="content"
+          name="content"
+          placeholder="Content"
+          value={formData.content}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+          rows="5"
+          required
+        />
+      </div>
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
       >
         Save as Draft
       </button>

@@ -139,8 +139,8 @@ export default function EditNewsPage() {
           onChange={(e) => setNews({ ...news, status: e.target.value })}
           className="p-3 rounded border text-black bg-white"
         >
-          <option value="draft">Draft</option>
-          <option value="published">Published</option>
+          <option value="DRAFT">Draft</option>
+          <option value="PUBLISHED">Published</option>
         </select>
 
         {/* Save Button */}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function EditorEditPage() {
   const { slug } = useParams();
@@ -36,10 +37,10 @@ export default function EditorEditPage() {
             status: data.status,
           });
         } else {
-          console.error('❌ Failed to load draft');
+          toast.error('❌ Failed to load draft');
         }
       } catch (err) {
-        console.error('⚠️ Error fetching draft:', err);
+        toast.error('⚠️ Error fetching draft');
       } finally {
         setLoading(false);
       }
@@ -78,16 +79,16 @@ export default function EditorEditPage() {
       });
 
       if (res.ok) {
-        alert('✅ News updated and published!');
+        toast.success('✅ News updated and published!');
         router.push('/editor/dashboard');
       } else {
         const error = await res.text();
         console.error('❌ Update failed:', error);
-        alert('❌ Update failed.');
+        toast.error('❌ Update failed');
       }
     } catch (err) {
       console.error('🚨 Update error:', err);
-      alert('Something went wrong.');
+      toast.error('Something went wrong');
     }
   };
 

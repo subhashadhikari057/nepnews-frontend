@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function MyDraftsList({ userId }) {
   const [drafts, setDrafts] = useState([]);
@@ -21,7 +22,7 @@ export default function MyDraftsList({ userId }) {
     if (!token || !userId) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/news/user/${userId}?status=draft`, {
+      const res = await fetch(`http://localhost:8080/api/news/user/${userId}?status=DRAFT`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -33,7 +34,7 @@ export default function MyDraftsList({ userId }) {
         // ✅ Normalize MongoDB ObjectId
         const normalized = data.map((d) => ({
           ...d,
-          id: d._id?.$oid || d._id, // Support both Object and String formats
+          id: d._id?.$oid || d._id,
         }));
 
         setDrafts(normalized);
@@ -52,26 +53,26 @@ export default function MyDraftsList({ userId }) {
   const handleDelete = async (slug) => {
     console.log('🗑️ Attempting to delete news with slug:', slug);
     if (!token || !slug) return;
-  
+
     const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-  
+
     if (res.ok) {
-      alert('✅ Deleted successfully');
+      toast.success('✅ Deleted successfully');
       fetchDrafts();
     } else {
       const msg = await res.text();
       console.error('❌ Delete failed:', msg);
-      alert('❌ Failed to delete: ' + msg);
+      toast.error('❌ Failed to delete: ' + msg);
     }
   };
 
   const handleEdit = (slug) => {
-    router.push(`/author/edit/${slug}`); // 👈 route with slug
+    router.push(`/author/edit/${slug}`);
   };
 
   if (!tokenReady) return null;
@@ -87,12 +88,12 @@ export default function MyDraftsList({ userId }) {
             <p className="text-sm text-gray-500">By: {draft.authorName}</p>
             <p className="mt-2">{draft.content?.slice(0, 100)}...</p>
             <div className="flex gap-2 mt-3">
-            <button
-  onClick={() => handleEdit(draft.slug)} // 👈 use slug instead of id
-  className="bg-yellow-500 text-white px-2 py-1 rounded cursor-pointer"
->
-  Edit
-</button>
+              <button
+                onClick={() => handleEdit(draft.slug)}
+                className="bg-yellow-500 text-white px-2 py-1 rounded cursor-pointer"
+              >
+                Edit
+              </button>
 
               <button
                 onClick={() => handleDelete(draft.slug)}

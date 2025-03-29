@@ -7,8 +7,10 @@ export default function FeaturedNewsSlider() {
   const [featuredNews, setFeaturedNews] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  //http://localhost:8080/api/news/published?page=${pageNum}&limit=6
+
   useEffect(() => {
-    fetch("http://localhost:8080/api/news?limit=5")
+    fetch("http://localhost:8080/api/news/published?limit=5")
       .then((res) => res.json())
       .then((data) => setFeaturedNews(data))
       .catch((err) => console.error("Error fetching featured news:", err));

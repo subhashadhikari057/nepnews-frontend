@@ -30,7 +30,7 @@ export default function ProfilePage() {
     }
 
     // Fetch suggested news from backend
-    fetch('http://localhost:8080/api/news?limit=5&random=true')
+    fetch('http://localhost:8080/api/news/published?limit=6&random=true')
       .then(res => res.json())
       .then(data => {
         setSuggestedNews(data);
