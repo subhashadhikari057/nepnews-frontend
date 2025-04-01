@@ -5,25 +5,28 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white mt-10">
+    <footer className="bg-black text-white mt-10">
+      {/* Top Section: About, Quick Links, Categories */}
       <div className="container mx-auto px-6 py-10 flex flex-col md:flex-row justify-between">
-        {/* About */}
+        
+        {/* 🔹 About Section */}
         <div className="mb-6 md:mb-0">
           <Image
-            src="/ads/logo.png" // Path to your logo in public/ads folder
+            src="/ads/logo.png" // 🔁 Change logo path if needed
             alt="NepNews Logo"
-            width={150} // Adjust width as needed
-            height={50} // Adjust height as needed
+            width={150}
+            height={50}
           />
-          <p className="text-sm text-gray-300 max-w-xs">
+          <p className="text-sm text-grey-500 max-w-xs mt-2">
             Trusted Nepali news platform bringing you the latest headlines, stories, and analysis.
           </p>
         </div>
 
-        {/* Quick Links */}
+        {/* 🔹 Quick Links */}
         <div className="mb-6 md:mb-0">
           <h4 className="text-lg font-semibold mb-2">Quick Links</h4>
           <ul className="space-y-1 text-sm">
+            {/* 🔁 Add or remove links as needed */}
             <li><Link href="/" className="hover:underline">Home</Link></li>
             <li><Link href="/profile" className="hover:underline">Profile</Link></li>
             <li><Link href="/signup" className="hover:underline">Sign Up</Link></li>
@@ -31,10 +34,11 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Categories */}
+        {/* 🔹 Categories Section */}
         <div>
           <h4 className="text-lg font-semibold mb-2">Categories</h4>
           <ul className="space-y-1 text-sm capitalize">
+            {/* 🔁 Update categories as needed */}
             {["national", "international", "politics", "sports", "technology"].map((cat) => (
               <li key={cat}>
                 <Link href={`/category/${cat}`} className="hover:underline">
@@ -46,8 +50,8 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="border-t border-white border-opacity-20 text-center py-4 text-sm text-gray-300">
+      {/* Bottom Section: Copyright */}
+      <div className="border-t border-white border-opacity-20 text-center py-4 text-sm text-gray-400">
         &copy; {new Date().getFullYear()} <span className="font-semibold">NepNews</span>. All rights reserved.
       </div>
     </footer>

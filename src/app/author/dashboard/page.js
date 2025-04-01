@@ -6,27 +6,50 @@ import MyDraftsList from '@/components/MyDraftsList';
 
 export default function AuthorDashboard() {
   const [userId, setUserId] = useState(null);
+  const [activeTab, setActiveTab] = useState('create'); // ✅ track current view
 
   useEffect(() => {
     const storedId = localStorage.getItem('userId');
     setUserId(storedId);
   }, []);
 
-  if (!userId) return <p>Loading...</p>;
+  if (!userId) return <p className="p-4">Loading...</p>;
 
   return (
-    <div className="pt-30 p-4 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">📝 Author Dashboard</h1>
+    <div className="pt-28 p-4 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-white-600">📝 Author Dashboard</h1>
 
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">✍️ Create News Draft</h2>
+      {/* ✅ Tab Navigation Buttons */}
+      <div className="flex space-x-4 mb-6">
+        <button
+          onClick={() => setActiveTab('create')}
+          className={`px-4 py-2 rounded-md font-medium ${
+            activeTab === 'create'
+              ? 'bg-green-600 text-white cursor-pointer'
+              : 'bg-gray-200 text-black hover:bg-gray-300'
+          }`}
+        >
+          ✍️ Create Draft
+        </button>
+
+        <button
+          onClick={() => setActiveTab('drafts')}
+          className={`px-4 py-2 rounded-md cursor-pointer font-medium ${
+            activeTab === 'drafts'
+              ? 'bg-green-600 text-white cursor-pointer'
+              : 'bg-gray-200 text-black hover:bg-gray-300'
+          }`}
+        >
+          📋 My Drafts
+        </button>
+      </div>
+
+      {/* ✅ Conditional View */}
+      {activeTab === 'create' ? (
         <CreateNewsForm userId={userId} />
-      </div>
-
-      <div>
-        <h2 className="text-xl font-semibold mb-2">📋 My Drafts</h2>
+      ) : (
         <MyDraftsList userId={userId} />
-      </div>
+      )}
     </div>
   );
 }

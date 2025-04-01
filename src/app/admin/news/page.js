@@ -70,7 +70,7 @@ export default function AdminNewsPage() {
 
   return (
     <div className="pt-24 px-6 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold text-blue-900 mb-6">🗂️ Admin: Manage News</h1>
+      <h1 className="text-3xl font-bold text-white-400 mb-6">🗂️ Admin: Manage News</h1>
 
       {/* 🔘 Tabs */}
       <div className="flex gap-4 mb-6">
@@ -115,13 +115,13 @@ export default function AdminNewsPage() {
           {filteredNews.map((n) => (
             <div
               key={n._id || n.slug}
-              className="border rounded shadow p-5 bg-white hover:bg-gray-50 transition"
+              className="border rounded shadow p-5 bg-gray hover:bg-green-900 transition cursor-pointer"
             >
-              <h2 className="text-xl font-bold text-gray-900">{n.title}</h2>
-              <p className="text-sm text-gray-600 mb-1">
+              <h2 className="text-xl font-bold text-white-900">{n.title}</h2>
+              <p className="text-sm text-white-300 mb-1">
                 ✍️ Author: <span className="font-medium">{n.authorName}</span>
               </p>
-              <p className="text-gray-700 mb-2">
+              <p className="text-white-700 mb-2">
                 {n.content.length > 200 ? n.content.slice(0, 200) + '...' : n.content}
               </p>
 

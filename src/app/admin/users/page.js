@@ -121,13 +121,13 @@ export default function AdminUserManagementPage() {
 
   return (
     <div className="pt-24 p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-blue-800 mb-6">👑 Admin: User Management</h1>
+      <h1 className="text-3xl font-bold text-white-300 mb-6">👑 Admin: User Management</h1>
 
       {users.length === 0 ? (
         <p>No users found.</p>
       ) : (
         <table className="w-full border rounded shadow text-left">
-          <thead className="bg-green-800 text-white">
+          <thead className="bg-gray-800 text-white">
             <tr>
               <th className="p-2">Name</th>
               <th className="p-2">Email</th>
@@ -138,27 +138,28 @@ export default function AdminUserManagementPage() {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id || user._id} className="border-t bg-white hover:bg-gray-50">
-                <td className="p-3 text-gray-800 font-medium">{user.name}</td>
-                <td className="p-3 text-gray-600">{user.email}</td>
-                <td className="p-3 font-bold text-blue-900">{user.role}</td>
+              // hover:bg-gray-50 make hover if you want
+              <tr key={user.id || user._id} className="border-t bg-gray ">  
+                <td className="p-3 text-white-800 font-medium">{user.name}</td>
+                <td className="p-3 text-white-600">{user.email}</td>
+                <td className="p-3 font-bold text-green-300">{user.role}</td>
                 <td className="p-3">
-                  <select
+                <select
                     value={user.role}
                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                    className="border p-1 rounded text-gray-800 bg-white"
+                    className="border p-2 rounded text-white-800 bg-green-800 cursor-pointer hover:brightness-105 transition"
                   >
                     {roles.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))}
-                  </select>
+                    <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+                </select>
                 </td>
                 <td className="p-3">
                   <button
                     onClick={() => handleDelete(user.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    className="bg-red-800 text-white px-3 py-1 rounded hover:bg-red-600 cursor-pointer"
                   >
                     Delete
                   </button>

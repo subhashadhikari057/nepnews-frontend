@@ -9,7 +9,7 @@ export default function SearchPage() {
   const query = searchParams.get("query") || "";
 
   return (
-    <main className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <main className="min-h-screen bg-black-100 dark:bg-black-900">
       {/* Ad Space Above Search Results */}
       <AdBanner type="search" />  
 

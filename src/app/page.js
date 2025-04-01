@@ -1,23 +1,25 @@
 import NewsList from "../components/NewsList"; // Import NewsList
 import AdBanner from "../components/AdBanner"; // Import Ad Space Component
-
 import FeaturedNewsSlider from "../components/FeaturedNewsSlider"; // Import News Slider
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      {/* Featured News Slider */}
-      <FeaturedNewsSlider />
+    <main className="min-h-screen" style={{ backgroundColor: '#050400' }}>
+      
+      {/* 🔥 Featured Slider Section (Top) */}
+      {/* <FeaturedNewsSlider /> */}
 
-      {/* Ad Banner Below Slider */}
-      <AdBanner type="home" />  
+      {/* 📢 Advertisement Banner Below Slider */}
+      <AdBanner type="home" />
 
-      {/* Latest News Section */}
+      {/* 📰 Latest News Section */}
       <div className="container mx-auto">
-        <h1 className="text-3xl font-bold text-center my-6 text-blue-600 dark:text-white">
+        <h1 className="text-3xl font-bold text-center my-6 text-white-600">
           Latest News 📰
         </h1>
-        <NewsList /> {/* Display News */}
+
+        {/* 🗞️ News Feed with Load More */}
+        <NewsList />
       </div>
     </main>
   );

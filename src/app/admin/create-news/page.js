@@ -64,9 +64,9 @@ export default function AdminCreateNewsPage() {
 
   return (
     <div className="pt-24 px-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-blue-800 mb-6">✍️ Create News</h1>
+      <h1 className="text-3xl font-bold text-white-400 mb-6">✍️ Create News</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 ">
         <input
           type="text"
           name="title"
@@ -125,7 +125,7 @@ export default function AdminCreateNewsPage() {
 
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
+          className="bg-gray-800 hover:bg-green-700 text-white px-6 py-2 rounded cursor-pointer"
         >
           ➕ Submit News
         </button>

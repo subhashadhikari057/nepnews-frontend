@@ -20,8 +20,8 @@ export default function AdminStatsChart({ data }) {
   return (
     <div className="grid md:grid-cols-2 gap-10 mt-10">
       {/* Role Distribution Pie */}
-      <div className="bg-white p-6 rounded shadow">
-        <h2 className="text-lg font-semibold mb-4 text-blue-800">User Role Distribution</h2>
+      <div className="bg-gray-800 p-6 rounded shadow">
+        <h2 className="text-lg font-semibold mb-4 text-white-800">User Role Distribution</h2>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
@@ -45,8 +45,8 @@ export default function AdminStatsChart({ data }) {
       </div>
 
       {/* News Status Pie */}
-      <div className="bg-white p-6 rounded shadow">
-        <h2 className="text-lg font-semibold mb-4 text-green-800">News Status Overview</h2>
+      <div className="bg-gray-800 p-6 rounded shadow">
+        <h2 className="text-lg font-semibold mb-4 text-white-800">News Status Overview</h2>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie

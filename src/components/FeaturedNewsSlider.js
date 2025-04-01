@@ -7,8 +7,6 @@ export default function FeaturedNewsSlider() {
   const [featuredNews, setFeaturedNews] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  //http://localhost:8080/api/news/published?page=${pageNum}&limit=6
-
   useEffect(() => {
     fetch("http://localhost:8080/api/news/published?limit=5")
       .then((res) => res.json())
@@ -27,25 +25,25 @@ export default function FeaturedNewsSlider() {
   }, [featuredNews]);
 
   if (featuredNews.length === 0) {
-    return <p className="text-center text-gray-500">Loading featured news...</p>;
+    return <p className="text-center text-gray-400 text-sm">Loading featured news...</p>;
   }
 
+  const currentNews = featuredNews[currentIndex];
+
   return (
-    <div className="relative w-full max-w-2xl mx-auto py-2 overflow-hidden">
-      <div className="relative w-full h-32 md:h-40 lg:h-48 bg-gray-300 rounded-md overflow-hidden">
-        <Link href={`/news/${featuredNews[currentIndex].slug}`} className="block">
-          <img
-            src={featuredNews[currentIndex].imageUrl}
-            alt={featuredNews[currentIndex].title}
-            className="w-full h-full object-cover object-top rounded-md"
-          />
-          <div className="absolute bottom-0 w-full bg-gradient-to-t from-black via-transparent to-transparent text-white p-2">
-            <h2 className="text-sm md:text-lg font-bold text-white drop-shadow-lg shadow-black bg-black/40 p-1 rounded-md">
-              {featuredNews[currentIndex].title}
-            </h2>
-          </div>
+    <div className="w-full max-w-3xl mx-auto px-4 py-4 mt-8">
+      <div className="bg-black text-white rounded-md p-4 shadow-md flex items-center gap-3 transition-all duration-500">
+        
+        <span className="text-pink-500 text-xl">•</span>
+        
+        <Link
+          href={`/news/${currentNews.slug}`}
+          className="text-sm md:text-base font-semibold hover:underline transition duration-300"
+        >
+          {currentNews.title}
         </Link>
       </div>
     </div>
   );
+  
 }

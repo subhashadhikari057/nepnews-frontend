@@ -47,21 +47,19 @@ export default function NewsDetailPage() {
     }
   }, [slug]);
 
-  if (loading) return <p className="text-center text-gray-500 py-10">Loading...</p>;
-  if (error || !news) return <p className="text-center text-red-500 py-10">{error || "News not found."}</p>;
+  if (loading) return <p className="text-center text-gray-400 py-10">Loading...</p>; // ⬅️ Loading color
+  if (error || !news) return <p className="text-center text-red-400 py-10">{error || "News not found."}</p>; // ⬅️ Error color
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <div className="bg-black text-white min-h-screen"> {/* ⬅️ Background black, text white */}
       <Navbar />
       <AdBanner type={news.category?.toLowerCase() || "default"} />
 
       <div className="container mx-auto p-6">
         {/* News Content */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            {news.title}
-          </h1>
-          <p className="text-sm text-gray-500 mb-4">
+        <div className="bg-black border border-white rounded-lg shadow-md p-6 mb-8"> {/* ⬅️ Black card with white border */}
+          <h1 className="text-3xl font-bold">{news.title}</h1>
+          <p className="text-sm text-gray-400 mb-4">
             {news.category} • {new Date(news.createdAt).toLocaleDateString()}
           </p>
           <img
@@ -69,16 +67,14 @@ export default function NewsDetailPage() {
             alt={news.title}
             className="w-full max-h-[400px] object-cover rounded-md mb-4"
           />
-          <p className="text-gray-800 dark:text-gray-300 text-lg whitespace-pre-line">
+          <p className="text-white text-lg whitespace-pre-line">
             {news.content}
           </p>
         </div>
 
         {/* Related News */}
         <div>
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-            Related News
-          </h2>
+          <h2 className="text-2xl font-semibold mb-4">Related News</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {related
               .filter((item) => item.slug !== slug)
@@ -87,17 +83,16 @@ export default function NewsDetailPage() {
                 <Link
                   key={item._id || item.slug}
                   href={`/news/${item.slug}`}
-                  className="block bg-white dark:bg-gray-800 p-4 rounded-md shadow hover:shadow-lg transition"
+                  className="block bg-black border border-white p-4 rounded-md shadow hover:shadow-lg transition"
+                  // ⬆️ Related card: black background + white border
                 >
                   <img
                     src={item.imageUrl}
                     alt={item.title}
                     className="w-full h-32 object-cover rounded-md"
                   />
-                  <h3 className="mt-2 text-lg font-bold text-gray-900 dark:text-white">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-1">{item.category}</p>
+                  <h3 className="mt-2 text-lg font-bold">{item.title}</h3>
+                  <p className="text-sm text-gray-400 mt-1">{item.category}</p> {/* ⬅️ Subtle category text */}
                 </Link>
               ))}
           </div>
