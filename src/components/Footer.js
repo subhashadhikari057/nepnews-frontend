@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white mt-10">
+    <footer className="bg-[#121623] text-white mt-10">
       {/* Top Section: About, Quick Links, Categories */}
       <div className="container mx-auto px-6 py-10 flex flex-col md:flex-row justify-between">
         

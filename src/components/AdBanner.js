@@ -47,7 +47,7 @@ export default function AdBanner({ type = "default" }) {
   }, [adImages.length]);
 
   return (
-    <div className="relative w-full h-40 md:h-48 lg:h-56 overflow-hidden mt-16">
+    <div className="relative w-full h-40 md:h-48 lg:h-56 overflow-hidden mt-8">
       <img
         src={adImages[currentIndex]}
         alt="Ad Banner"

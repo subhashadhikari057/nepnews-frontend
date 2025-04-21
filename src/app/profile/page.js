@@ -56,12 +56,12 @@ export default function ProfilePage() {
     <div
       className="min-h-screen px-4 py-10 flex flex-col items-center justify-center"
       style={{
-        backgroundColor: '#0d0c0b', // solid black background
+        backgroundColor: 'navbar', // solid black background
       }}
     >
       <div
         className="p-8 rounded-xl shadow-lg w-full max-w-lg"
-        style={{ backgroundColor: '#b0a794' }} // profile card stays warm yellow
+        style={{ backgroundColor: 'grey' }} // profile card stays warm yellow
       >
         {/* Avatar */}
         <div className="flex justify-center mb-4">
@@ -144,7 +144,7 @@ export default function ProfilePage() {
               <Link
                 key={index}
                 href={`/news/${news.slug}`}
-                className="flex flex-col justify-between border-l-4 border-blue-500 bg-blue-50 hover:bg-green-800 p-4 rounded-md transition h-full"
+                className="flex flex-col justify-between border-l-4 border-blue-500 bg-blue-50 hover:bg-blue-500 p-4 rounded-md transition h-full"
               >
                 <p className="text-gray-900 font-semibold text-base mb-2">{news.title}</p>
                 <p className="text-sm text-gray-600">{news.category}</p>

@@ -1,7 +1,5 @@
 import './globals.css';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import ToastProvider from '../components/ToastProvider'; // ✅ Use wrapper
+import LayoutClientWrapper from './LayoutClientWrapper'; // 👇 Wraps the splash logic
 
 export const metadata = {
   title: 'NepNews',
@@ -12,10 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col justify-between">
-        <Navbar />
-        <ToastProvider /> {/* ✅ Now client-safe */}
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <LayoutClientWrapper>{children}</LayoutClientWrapper>
       </body>
     </html>
   );
