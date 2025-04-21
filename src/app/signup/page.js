@@ -7,7 +7,8 @@ import Link from 'next/link';
 export default function SignupPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: ''
   });
@@ -24,29 +25,30 @@ export default function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+
     try {
       const res = await fetch('http://localhost:8080/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          name: fullName,
+          email: formData.email,
+          password: formData.password
+        })
       });
 
       const message = await res.text();
 
       if (res.ok) {
-        // ✅ Store dummy values for now
-        localStorage.setItem('token', 'dummy-token'); // Replace with actual token if implemented
-        localStorage.setItem('name', formData.name);
+        localStorage.setItem('token', 'dummy-token');
+        localStorage.setItem('name', fullName);
         localStorage.setItem('email', formData.email);
         localStorage.setItem('role', 'reader');
         localStorage.setItem('userId', 'dummy-id');
-
-        // ✅ Notify navbar to update
         window.dispatchEvent(new Event('userLoggedIn'));
 
-        // ✅ Show success message
         setMessage('✅ Successfully registered! Redirecting...');
-
         setTimeout(() => {
           router.push('/');
         }, 2000);
@@ -61,86 +63,101 @@ export default function SignupPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: 'url("/bg.png")' }}
+      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center"
+      style={{
+        backgroundImage:
+          "url('https://w0.peakpx.com/wallpaper/34/44/HD-wallpaper-person-s-right-hand-near-newspaper.jpg')"
+      }}
     >
-      <div className="bg-white bg-opacity-80 backdrop-blur-md p-8 rounded-xl shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800">Create an account</h2>
-        <p className="text-center text-sm text-gray-600 mt-2">
-          Already have an account?{' '}
-          <Link href="/login" className="text-blue-600 underline">Log in</Link>
-        </p>
+      <div className="w-full max-w-4xl flex bg-black/60 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden">
+        {/* Left: Form */}
+        <div className="w-full md:w-1/2 p-10 text-white">
+          <h2 className="text-3xl font-extrabold mb-1">Create Your Account<span className="text-blue-500">.</span></h2>
+          <p className="text-sm text-gray-300 mb-4">
+            Already Have An Account?{' '}
+            <Link href="/login" className="text-blue-400 underline">Log In</Link>
+          </p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">What should we call you?</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your profile name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 placeholder-gray-500"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex gap-4">
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                className="w-1/2 px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-gray-300"
+              />
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                className="w-1/2 px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-gray-300"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">What’s your email?</label>
             <input
               type="email"
               name="email"
-              placeholder="Enter your email address"
+              placeholder="example.email@gmail.com"
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 placeholder-gray-500"
+              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-gray-300"
             />
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Create a password</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="password"
-                placeholder="Enter your password"
+                placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 placeholder-gray-500"
+                className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder-gray-300"
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-sm text-gray-600 cursor-pointer"
+                className="absolute right-3 top-2.5 text-sm text-gray-300 cursor-pointer"
               >
-                {showPassword ? '🙈 Hide' : '👁️ Show'}
+                {showPassword ? '🙈' : '👁️'}
               </span>
             </div>
-            <p className="text-xs text-gray-600 mt-1">Use 8+ characters with letters, numbers & symbols</p>
-          </div>
 
-          <p className="text-xs text-gray-600 text-center">
-            By creating an account, you agree to the <span className="underline">Terms of use</span> and <span className="underline">Privacy Policy</span>.
-          </p>
+            <div className="text-xs text-gray-300">
+              <input type="checkbox" required className="mr-2" />
+              I agree to Platform’s <span className="underline text-blue-400">Terms of Service</span> and <span className="underline text-blue-400">Privacy Policy</span>.
+            </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-full transition"
-          >
-            Create an account
-          </button>
-
-          {message && (
-            <p
-              className={`text-center text-sm mt-2 ${
-                message.startsWith('✅') ? 'text-green-600' : 'text-red-500'
-              }`}
+            <button
+              type="submit"
+              className="w-full bg-blue-500 hover:bg-blue-600 transition text-white font-semibold py-2 rounded-md"
             >
-              {message}
-            </p>
-          )}
-        </form>
+              Create Account
+            </button>
+
+            <p className="text-center text-sm text-gray-300">Or Sign Up with</p>
+
+            <div className="flex justify-center gap-4">
+              <button type="button" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-md">G</button>
+              <button type="button" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-md">f</button>
+              <button type="button" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-md"></button>
+            </div>
+
+            {message && (
+              <p className={`text-center text-sm mt-2 ${message.startsWith('✅') ? 'text-green-500' : 'text-red-400'}`}>
+                {message}
+              </p>
+            )}
+          </form>
+        </div>
+
+        {/* Optional Right Panel (empty or decorative) */}
+        <div className="hidden md:block w-1/2 bg-transparent" />
       </div>
     </div>
   );

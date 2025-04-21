@@ -11,7 +11,15 @@ export default function NepalTimeBar() {
     "🧠 “The truth is rarely pure and never simple.” – Oscar Wilde",
     "🧠 “Journalism is what we need to make democracy work.” – Walter Cronkite",
     "🧠 “Facts do not cease to exist because they are ignored.” – Aldous Huxley",
+    "🧠 “News is what somebody does not want you to print.” – George Orwell",
+    "🧠 “Journalism is the first rough draft of history.” – Philip L. Graham",
+    "🧠 “A good newspaper is a nation talking to itself.” – Arthur Miller",
+    "🧠 “The press was to serve the governed, not the governors.” – Hugo Black",
+    "🧠 “The news is the first signal of trouble.” – Walter Lippmann",
+    "🧠 “If you don’t read the newspaper, you’re uninformed.” – Mark Twain",
+    "🧠 “In seeking truth you have to get both sides of a story.” – Walter Cronkite"
   ];
+  
 
   const goldPrice = "NPR 177,899.33";
   const silverPrice = "NPR 2,035.37";
@@ -20,7 +28,7 @@ export default function NepalTimeBar() {
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(getNepalTime());
-    }, 100);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
