@@ -21,7 +21,7 @@ export default function NepalTimeBar() {
   ];
   
 
-  const goldPrice = "NPR 177,899.33";
+  const goldPrice = "NPR 190,998.00";
   const silverPrice = "NPR 2,035.37";
 
   // ⏰ Time update every second

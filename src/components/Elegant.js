@@ -72,7 +72,7 @@ function ElegantShape({
 }
 
 export default function HeroGeometric({
-  badge = "Urusha",
+  badge = "Group C",
   title1 = "Nep",
   title2 = "News",
 }) {

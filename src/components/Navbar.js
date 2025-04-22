@@ -145,7 +145,7 @@ export default function Navbar() {
             ) : (
               <div className="flex items-center gap-4 ml-4">
                 <Link href="/login" className="text-white text-base font-medium hover:text-blue-400 transition">Login</Link>
-                <Link href="/signup" className="text-white text-base font-medium px-4 py-1.5 rounded-lg hover:text-pink-400 transition">SignUp</Link>
+                <Link href="/signup" className="text-white text-base font-medium px-4 py-1.5 rounded-lg hover:text-blue-400 transition">SignUp</Link>
               </div>
             )
           )}
