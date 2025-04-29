@@ -15,7 +15,7 @@ export default function SearchPage() {
 
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white my-6">
-          Search Results for "{query}"
+        Search Results for &quot;{query}&quot;
         </h1>
         <NewsList searchQuery={query} /> {/* Pass query to NewsList */}
       </div>
