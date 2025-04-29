@@ -22,7 +22,7 @@ export default function EditorEditPage() {
       if (!slug || !token) return;
 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/slug/${slug}`, {
+        const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -69,7 +69,7 @@ export default function EditorEditPage() {
     };
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/slug/${slug}`, {
+      const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

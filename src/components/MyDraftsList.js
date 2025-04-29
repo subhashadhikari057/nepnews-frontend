@@ -22,7 +22,7 @@ export default function MyDraftsList({ userId }) {
     if (!token || !userId) return;
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/user/${userId}?status=DRAFT`, {
+      const res = await fetch(`http://localhost:8080/api/news/user/${userId}?status=DRAFT`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,7 +54,7 @@ export default function MyDraftsList({ userId }) {
     console.log('🗑️ Attempting to delete news with slug:', slug);
     if (!token || !slug) return;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/slug/${slug}`, {
+    const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,

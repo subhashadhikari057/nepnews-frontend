@@ -17,7 +17,7 @@ export default function CategoryPage() {
 
     const fetchNewsByCategory = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/category/${category}`);
+        const response = await fetch(`http://localhost:8080/api/news/category/${category}`);
         if (!response.ok) throw new Error("Failed to fetch news.");
         const data = await response.json();
         setNews(data);

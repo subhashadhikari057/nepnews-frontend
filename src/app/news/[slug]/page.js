@@ -18,7 +18,7 @@ export default function NewsDetailPage() {
   const fetchNews = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/slug/${slug}`, { cache: "no-store" });
+      const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to fetch news.");
       const data = await res.json();
       setNews(data);
@@ -32,7 +32,7 @@ export default function NewsDetailPage() {
 
   const fetchRelated = async (category) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/category/${category}`, { cache: "no-store" });
+      const res = await fetch(`http://localhost:8080/api/news/category/${category}`, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to fetch related news.");
       const data = await res.json();
       setRelated(data);

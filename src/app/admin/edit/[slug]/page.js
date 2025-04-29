@@ -30,7 +30,7 @@ export default function EditNewsPage() {
 
   const fetchNews = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/slug/${slug}`);
+      const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`);
       const data = await res.json();
       setNews(data);
     } catch (err) {
@@ -44,7 +44,7 @@ export default function EditNewsPage() {
   const handleUpdate = async () => {
     const toastId = toast.loading('Updating news...');
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/slug/${slug}`, {
+      const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

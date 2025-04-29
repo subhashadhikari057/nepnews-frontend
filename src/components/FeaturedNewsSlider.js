@@ -8,7 +8,7 @@ export default function FeaturedNewsSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    fetch("${process.env.NEXT_PUBLIC_API_URL}/api/news/published?limit=5")
+    fetch("http://localhost:8080/api/news/published?limit=5")
       .then((res) => res.json())
       .then((data) => setFeaturedNews(data))
       .catch((err) => console.error("Error fetching featured news:", err));
