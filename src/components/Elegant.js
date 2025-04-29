@@ -1,4 +1,4 @@
-"use client";
+"use client"; // splash page
 
 import { motion } from "framer-motion";
 import { Pacifico } from "next/font/google";
