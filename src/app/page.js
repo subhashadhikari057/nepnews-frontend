@@ -9,7 +9,7 @@ export default function Home() {
       <AdBanner type="home" />
 
       <div className="container mx-auto">
-        <h1 className="text-3xl font-bold text-center my-6 text-white-600">
+        <h1 className="text-3xl font-bold text-center my-6 text-white">
           Latest News 📰
         </h1>
 
