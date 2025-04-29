@@ -145,7 +145,7 @@ export default function Navbar() {
                 </button>
                 {showDropdown && (
                   <div ref={dropdownRef} className="absolute right-0 mt-2 bg-black border border-white-300 rounded shadow-md w-40 z-10">
-                    {(userRole === 'ADMIN' || userRole === 'EDITOR' || userRole === 'AUTHOR') && (
+                    {(userRole === 'admin' || userRole === 'editor' || userRole === 'author') && (
                       <Link href={`/${userRole.toLowerCase()}/dashboard`} onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-sm hover:text-blue-400 transition">
                         Dashboard
                       </Link>
@@ -199,7 +199,7 @@ export default function Navbar() {
 
             {!isLoading && isLoggedIn && (
               <>
-                {(userRole === 'ADMIN' || userRole === 'EDITOR' || userRole === 'AUTHOR') && (
+                {(userRole === 'admin' || userRole === 'editor' || userRole === 'author') && (
                   <Link href={`/${userRole.toLowerCase()}/dashboard`} onClick={toggleMenu} className="hover:text-blue-400 transition">📊 Dashboard</Link>
                 )}
                 <Link href="/profile" onClick={toggleMenu} className="hover:text-blue-400 transition">Profile</Link>

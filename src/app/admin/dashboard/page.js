@@ -19,12 +19,12 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/admin/stats', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/stats`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
+    
         if (res.ok) {
           const data = await res.json();
           setStats(data);
