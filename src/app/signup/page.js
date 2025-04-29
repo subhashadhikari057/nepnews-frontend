@@ -28,7 +28,7 @@ export default function SignupPage() {
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
     try {
-      const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -41,16 +41,9 @@ export default function SignupPage() {
       const message = await res.text();
 
       if (res.ok) {
-        localStorage.setItem('token', 'dummy-token');
-        localStorage.setItem('name', fullName);
-        localStorage.setItem('email', formData.email);
-        localStorage.setItem('role', 'reader');
-        localStorage.setItem('userId', 'dummy-id');
-        window.dispatchEvent(new Event('userLoggedIn'));
-
-        setMessage('✅ Successfully registered! Redirecting...');
+        setMessage('✅ Successfully registered! Redirecting to login...');
         setTimeout(() => {
-          router.push('/');
+          router.push('/login'); // ⬅️ redirect to login after successful signup
         }, 2000);
       } else {
         setMessage(message || 'Signup failed.');
@@ -156,7 +149,7 @@ export default function SignupPage() {
           </form>
         </div>
 
-        {/* Optional Right Panel (empty or decorative) */}
+        {/* Optional Right Panel */}
         <div className="hidden md:block w-1/2 bg-transparent" />
       </div>
     </div>

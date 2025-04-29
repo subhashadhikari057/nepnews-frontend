@@ -25,19 +25,33 @@ export default function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
-
-      const data = await res.json();
-
-      if (res.ok) {
+  
+      const contentType = res.headers.get('content-type');
+  
+      let data = {};
+      if (contentType && contentType.includes('application/json')) {
+        data = await res.json(); // Safe to parse JSON
+      } else {
+        const text = await res.text(); // Otherwise, fallback to plain text
+        data = { message: text };
+      }
+  
+      if (res.ok && data.token) {
+        // ✅ Successful login
         localStorage.setItem('token', data.token);
         localStorage.setItem('name', data.name);
-        localStorage.setItem('email', data.email || formData.email);
-        localStorage.setItem('role', data.role);
+        localStorage.setItem('email', formData.email);
+        localStorage.setItem('role', data.role.toLowerCase());
         localStorage.setItem('userId', data.userId);
+  
         window.dispatchEvent(new Event('userLoggedIn'));
         router.push('/');
       } else {
-        setMessage(data.message || 'Invalid credentials.');
+        if (res.status === 401 || res.status === 403) {
+          setMessage(data.message || 'Invalid email or password.');
+        } else {
+          setMessage(data.message || 'Something went wrong. Please try again.');
+        }
       }
     } catch (err) {
       console.error('Login error:', err);
@@ -56,12 +70,11 @@ export default function LoginPage() {
         }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white px-10 text-center">
-          <h1 className="text-3xl md:text-2`xl font-bold mb-4 flex items-center gap-2">
-             NepNews-Trusted Nepali news platform bringing you the latest headlines, stories, and analysis.
+          <h1 className="text-3xl md:text-2xl font-bold mb-4">
+            NepNews — Trusted Nepali news platform bringing you the latest headlines, stories, and analysis.
           </h1>
           <p className="text-base md:text-lg italic">
-            “Facts do not cease to exist because they are ignored.”
-            <br />
+            “Facts do not cease to exist because they are ignored.”<br />
             <span className="not-italic font-medium">– Aldous Huxley</span>
           </p>
         </div>
