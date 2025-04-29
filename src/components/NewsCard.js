@@ -13,17 +13,17 @@ export default function NewsCard({ article }) {
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-navbar border border-white-500 shadow-md rounded-lg p-4"
+      className="bg-navbar border border-white shadow-md rounded-lg p-4"
     >
       <img
         src={article.imageUrl}
         alt={article.title}
         className="w-full h-40 object-cover rounded-md bg-gray-300"
       />
-      <h2 className="text-xl font-bold mt-2 text-white-100">
+      <h2 className="text-xl font-bold mt-2 text-white">
         {article.title}
       </h2>
-      <p className="text-white-800 mt-1">
+      <p className="text-white mt-1">
         {article.content
           ? article.content.length > 300
             ? `${article.content.substring(0, 300)}...`
