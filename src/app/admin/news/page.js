@@ -24,7 +24,7 @@ export default function AdminNewsPage() {
   const fetchNews = async (status) => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:8080/api/news/status/${status}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/status/${status}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -47,7 +47,7 @@ export default function AdminNewsPage() {
   const handleDelete = async (slug) => {
     const confirmToast = toast.loading('Deleting...');
     try {
-      const res = await fetch(`http://localhost:8080/api/news/slug/${slug}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/slug/${slug}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

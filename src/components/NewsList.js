@@ -23,7 +23,7 @@ export default function NewsList({ searchQuery = "" }) {
 
   const fetchNews = async (pageNum, reset = false) => {
     try {
-      let url = `http://localhost:8080/api/news/published?page=${pageNum}&limit=12`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/api/news/published?page=${pageNum}&limit=12`;
       if (searchQuery) url += `&search=${searchQuery}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch news");
