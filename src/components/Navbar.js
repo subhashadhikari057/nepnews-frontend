@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -19,6 +19,7 @@ export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
 
   const router = useRouter();
+  const dropdownRef = useRef(null); // ✅ Ref for outside click
 
   useEffect(() => {
     const checkLogin = () => {
@@ -62,6 +63,21 @@ export default function Navbar() {
     }
   }, [showMenu]);
 
+  // ✅ Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
+
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
@@ -86,7 +102,6 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 w-full z-30 transition-all duration-300 ${scrolling ? "shadow-md py-2" : "py-2"} backdrop-blur-md bg-[rgba(12,15,26,0.7)] text-white`}>
       
-      {/* NepalTimeBar on desktop */}
       {!scrolling && !isMobile && (
         <div className="pb-1">
           <NepalTimeBar />
@@ -94,20 +109,16 @@ export default function Navbar() {
       )}
 
       <div className="container mx-auto px-4 flex justify-between items-center">
-        
-        {/* Logo */}
         <Link href="/" className="flex items-center">
           <span className="text-white text-xl font-bold">NepNews</span>
         </Link>
 
-        {/* Hamburger */}
         <button onClick={toggleMenu} className="md:hidden p-2 text-white hover:text-blue-400 focus:outline-none">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
 
-        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6 ml-8">
           {["national", "international", "politics", "sports", "technology", "entertainment", "finance"].map((category) => (
             <Link key={category} href={`/category/${category}`} className="capitalize hover:text-blue-400 transition">
@@ -115,7 +126,6 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* Search Desktop */}
           <form onSubmit={handleSearch} className="relative flex items-center border border-white-500 rounded-md px-2 bg-navbar">
             <input
               type="text"
@@ -127,7 +137,6 @@ export default function Navbar() {
             <button type="submit" className="ml-2 text-blue-300 hover:text-white">🔍</button>
           </form>
 
-          {/* User Desktop */}
           {!isLoading && (
             isLoggedIn ? (
               <div className="relative ml-4">
@@ -135,7 +144,7 @@ export default function Navbar() {
                   👤 {userName.split(" ")[0]}
                 </button>
                 {showDropdown && (
-                  <div className="absolute right-0 mt-2 bg-black border border-white-300 rounded shadow-md w-40 z-10">
+                  <div ref={dropdownRef} className="absolute right-0 mt-2 bg-black border border-white-300 rounded shadow-md w-40 z-10">
                     {(userRole === 'ADMIN' || userRole === 'EDITOR' || userRole === 'AUTHOR') && (
                       <Link href={`/${userRole.toLowerCase()}/dashboard`} onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-sm hover:text-blue-400 transition">
                         Dashboard
@@ -143,6 +152,9 @@ export default function Navbar() {
                     )}
                     <Link href="/profile" onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-sm hover:text-blue-400 transition">
                       Profile
+                    </Link>
+                    <Link href="/bookmarks" onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-sm hover:text-blue-400 transition">
+                      Bookmarks
                     </Link>
                     <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-white-400 hover:text-blue-400 transition">
                       Logout
@@ -160,19 +172,14 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {showMenu && (
         <div className="fixed top-0 left-0 w-full h-[60vh] bg-black bg-opacity-90 z-40 flex flex-col animate-slide-down">
-          {/* Top (Menu + X) */}
           <div className="flex items-center justify-between p-4 border-b border-white">
             <span className="text-lg font-bold">Menu</span>
             <button onClick={toggleMenu} className="text-white hover:text-blue-400 text-2xl">✖</button>
           </div>
 
-          {/* Mobile Menu Content */}
           <div className="flex flex-col gap-6 p-6 overflow-y-auto flex-grow">
-            
-            {/* Search at Top */}
             <form onSubmit={(e) => { handleSearch(e); toggleMenu(); }} className="flex items-center gap-2">
               <input
                 type="text"
@@ -184,21 +191,20 @@ export default function Navbar() {
               <button type="submit" className="text-white hover:text-blue-400 text-xl">🔍</button>
             </form>
 
-            {/* Categories */}
             {["national", "international", "politics", "sports", "technology", "entertainment", "finance"].map((category) => (
               <Link key={category} href={`/category/${category}`} onClick={toggleMenu} className="capitalize text-white hover:text-blue-400 transition">
                 {category}
               </Link>
             ))}
 
-            {/* Profile Links */}
             {!isLoading && isLoggedIn && (
               <>
                 {(userRole === 'ADMIN' || userRole === 'EDITOR' || userRole === 'AUTHOR') && (
                   <Link href={`/${userRole.toLowerCase()}/dashboard`} onClick={toggleMenu} className="hover:text-blue-400 transition">📊 Dashboard</Link>
                 )}
-                <Link href="/profile" onClick={toggleMenu} className="hover:text-blue-400 transition">👤 Profile</Link>
-                <button onClick={() => { handleLogout(); }} className="text-left hover:text-blue-400 transition">Logout</button>
+                <Link href="/profile" onClick={toggleMenu} className="hover:text-blue-400 transition">Profile</Link>
+                <Link href="/bookmarks" onClick={toggleMenu} className="hover:text-blue-400 transition"> Bookmarks</Link>
+                <button onClick={handleLogout} className="text-left hover:text-blue-400 transition">Logout</button>
               </>
             )}
             {!isLoggedIn && !isLoading && (

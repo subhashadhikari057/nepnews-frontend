@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast';
 export default function ToastProvider() {
   return (
     <Toaster
-      position="bottom-center"
+      position="top-center"
       reverseOrder={false}
       toastOptions={{
         duration: 4000, // how long toast stays
@@ -19,7 +19,7 @@ export default function ToastProvider() {
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
         },
         success: {
-          icon: '✅',
+          icon: '',
           style: {
             background: '#2f855a', // green for success
             color: '#fff',

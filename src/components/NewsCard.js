@@ -1,20 +1,47 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import BookmarkButton from "./BookmarkButton";
 
 export default function NewsCard({ article }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { margin: "0px 0px -50px 0px" }); // animate every time visible
+  const isInView = useInView(ref, { margin: "0px 0px -50px 0px" });
+
+  const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUserId = localStorage.getItem("userId");
+      const storedToken = localStorage.getItem("token");
+      setUserId(storedUserId);
+      setToken(storedToken);
+    }
+  }, []);
 
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-navbar border border-white shadow-md rounded-lg p-4"
-    >
+  ref={ref}
+  initial={{ opacity: 0, y: 30 }}
+  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+  whileHover={{
+    scale: 1.015,
+    transition: { type: "spring", stiffness: 200, damping: 20 }
+  }}
+  className="relative bg-navbar border border-white shadow-md hover:shadow-lg rounded-lg p-4"
+>
+      {userId && token && (
+  <div className="absolute bottom-11 right-2 cursor-pointer">
+    <BookmarkButton
+      userId={userId}
+      articleId={article.id}
+      token={token}
+    />
+  </div>
+)}
+
+
       <img
         src={article.imageUrl}
         alt={article.title}
@@ -30,9 +57,10 @@ export default function NewsCard({ article }) {
             : article.content
           : "No content available."}
       </p>
+
       <Link
         href={`/news/${article.slug}`}
-        className="text-blue-500 hover:underline mt-2 block"
+        className="text-blue-500 hover:underline mt-3 block"
       >
         Read More →
       </Link>
