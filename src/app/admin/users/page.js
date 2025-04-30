@@ -16,15 +16,15 @@ export default function AdminUserManagementPage() {
 
   useEffect(() => {
     if (!token) return;
-
+  
     const fetchUsers = async () => {
       try {
-        const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/users', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
+  
         if (res.ok) {
           const data = await res.json();
           setUsers(data);
@@ -38,9 +38,10 @@ export default function AdminUserManagementPage() {
         setLoading(false);
       }
     };
-
+  
     fetchUsers();
   }, [token]);
+  
 
   const handleRoleChange = async (id, newRole) => {
     const loadingToast = toast.loading('Updating role...');

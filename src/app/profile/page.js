@@ -30,7 +30,7 @@ export default function ProfilePage() {
     }
 
     // Fetch suggested news from backend
-    fetch('${process.env.NEXT_PUBLIC_API_URL}/api/news/published?limit=6&random=true')
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/published?limit=6&random=true`)
       .then(res => res.json())
       .then(data => {
         setSuggestedNews(data);

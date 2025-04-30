@@ -59,7 +59,8 @@ export default function CreateNewsForm({ userId }) {
     const toastId = toast.loading('Saving your draft...');
 
     try {
-      const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/news', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news`, {
+
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

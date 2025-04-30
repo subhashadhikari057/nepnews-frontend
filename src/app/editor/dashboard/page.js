@@ -22,7 +22,8 @@ export default function EditorDashboard() {
       if (!token) return;
 
       try {
-        const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/news/status/draft', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/status/draft`, {
+
           headers: {
             Authorization: `Bearer ${token}`,
           },
