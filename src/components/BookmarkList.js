@@ -8,7 +8,6 @@ export default function BookmarkList() {
   const [bookmarks, setBookmarks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Get userId and token from localStorage
   const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
@@ -50,7 +49,17 @@ export default function BookmarkList() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {bookmarks.map((item, index) => (
-        <BookmarkCard key={index} article={item.article} />
+        <BookmarkCard
+          key={index}
+          article={item.article}
+          userId={userId}
+          token={token}
+          onBookmarkToggle={() => {
+            setBookmarks((prev) =>
+              prev.filter((b) => b.article.id !== item.article.id)
+            );
+          }}
+        />
       ))}
     </div>
   );

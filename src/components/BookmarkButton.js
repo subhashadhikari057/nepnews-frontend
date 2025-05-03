@@ -5,11 +5,10 @@ import axios from "axios";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-export default function BookmarkButton({ userId, articleId, token }) {
+export default function BookmarkButton({ userId, articleId, token, onToggle }) {
   const [bookmarked, setBookmarked] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Fetch bookmark status initially
   useEffect(() => {
     const fetchBookmarkStatus = async () => {
       if (!userId || !articleId || !token) return;
@@ -21,11 +20,7 @@ export default function BookmarkButton({ userId, articleId, token }) {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
-        const bookmarks = res.data;
-        const isBookmarked = bookmarks.some(
-          (b) => b.article.id === articleId
-        );
+        const isBookmarked = res.data.some((b) => b.article.id === articleId);
         setBookmarked(isBookmarked);
       } catch (err) {
         console.error("Error fetching bookmarks:", err);
@@ -35,12 +30,10 @@ export default function BookmarkButton({ userId, articleId, token }) {
     fetchBookmarkStatus();
   }, [userId, articleId, token]);
 
-  // ✅ Handle bookmark toggle
   const toggleBookmark = async () => {
     if (!userId || !articleId || !token) return;
-  
     setLoading(true);
-  
+
     try {
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/bookmarks/toggle`,
@@ -51,18 +44,20 @@ export default function BookmarkButton({ userId, articleId, token }) {
           withCredentials: true,
         }
       );
-  
+
       const newState = !bookmarked;
       setBookmarked(newState);
-  
-      toast.success(
-        newState ? "Bookmark saved!" : "Bookmark removed!"
-      );
+      toast.success(newState ? "Bookmark saved!" : "Bookmark removed!");
+
+      // ✅ Inform parent (BookmarkCard) when unbookmarked
+      if (!newState && onToggle) {
+        onToggle();
+      }
     } catch (error) {
       console.error("Bookmark toggle failed:", error);
       toast.error("Failed to update bookmark. Please try again.");
     }
-  
+
     setLoading(false);
   };
 
