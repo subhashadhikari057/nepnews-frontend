@@ -15,48 +15,57 @@ export default function SubscriptionModal({ onClose }) {
     return () => clearTimeout(timer);
   }, []);
 
-const userId = localStorage.getItem("userId");
+  const handlePayment = async () => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
 
-const handlePayment = async () => {
-  const token = localStorage.getItem("token");
-  if (!token || token.trim() === "") {
-    toast.error("You must be logged in to subscribe.");
-    return;
-  }
+    console.log("✅ Sending purchaseOrderId (userId):", userId);
 
-  setLoading(true);
+    if (!token || token.trim() === "") {
+      toast.error("You must be logged in to subscribe.");
+      return;
+    }
 
-  try {
-    const res = await fetch("http://localhost:8080/api/khalti/initiate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        returnUrl: "http://localhost:3000/verify",
-        websiteUrl: "http://localhost:3000",
-        amount: 10000,
-        purchaseOrderId: userId, // 🔄 Replace with real user ID if available
-        purchaseOrderName: "NepNews Subscription",
-        name: "Test User",
-        email: "test@example.com",
-        phone: "9800000002"
-      })
-    });
+    if (!userId || userId.trim() === "") {
+      toast.error("User ID is missing. Please log in again.");
+      return;
+    }
 
-    const data = await res.json();
+    setLoading(true);
 
-    if (data.payment_url) {
-      window.location.href = data.payment_url;
-    } else {
-      toast.error("Failed to initiate payment.");
+    try {
+      const res = await fetch("http://localhost:8080/api/khalti/initiate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+  returnUrl: "http://localhost:3000/verify",
+  websiteUrl: "http://localhost:3000",
+  amount: 10000,
+  purchaseOrderId: userId,
+  purchaseOrderName: "NepNews Subscription",
+  merchantExtra: userId, // ✅ Add this!
+  name: "Test User",
+  email: "test@example.com",
+  phone: "9800000002"
+})
+      });
+
+      const data = await res.json();
+
+      if (data.payment_url) {
+        window.location.href = data.payment_url;
+      } else {
+        toast.error("Failed to initiate payment.");
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("Payment error:", err);
+      toast.error("Something went wrong during payment.");
       setLoading(false);
     }
-  } catch (err) {
-    toast.error("Something went wrong.");
-    setLoading(false);
-  }
-};
+  };
 
   if (!show) return null;
 
