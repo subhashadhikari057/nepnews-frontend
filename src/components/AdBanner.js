@@ -3,25 +3,42 @@
 import { useState, useEffect } from "react";
 
 export default function AdBanner({ type = "default" }) {
-  // Define ad images for each category
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+  const [showAd, setShowAd] = useState(false);
+
+  // Check subscription status
+  useEffect(() => {
+    const isSubscribed = localStorage.getItem("isSubscribed") === "true";
+    setShowAd(!isSubscribed); // only show ads if not subscribed
+  }, []);
+
+  // Rotate images if ads are showing
+  useEffect(() => {
+    if (!showAd) return;
+
+    const interval = setInterval(() => {
+      setFade(false); // Start fading out
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % adImages.length);
+        setFade(true); // Fade in the new image
+      }, 500);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [showAd]);
+
+  // Ad image sets
   const getAdImages = () => {
     switch (type) {
       case "home":
-        return ["/ads/ad1.png", "/ads/ad2.png"];
       case "search":
-        return ["/ads/ad1.png", "/ads/ad2.png"];
       case "national":
-        return ["/ads/ad1.png", "/ads/ad2.png"];
       case "international":
-        return ["/ads/ad1.png", "/ads/ad2.png"];
       case "politics":
-        return ["/ads/ad1.png", "/ads/ad2.png"];
       case "sports":
-        return ["/ads/ad1.png", "/ads/ad2.png"];
       case "technology":
-        return ["/ads/ad1.png", "/ads/ad2.png"];
       case "entertainment":
-        return ["/ads/ad1.png", "/ads/ad2.png"];
       case "finance":
         return ["/ads/ad1.png", "/ads/ad2.png"];
       default:
@@ -30,21 +47,9 @@ export default function AdBanner({ type = "default" }) {
   };
 
   const adImages = getAdImages();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [fade, setFade] = useState(true);
 
-  // Auto-rotate images with smooth transition
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFade(false); // Start fading out
-      setTimeout(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % adImages.length);
-        setFade(true); // Fade in the new image
-      }, 500); // Wait before changing image
-    }, 5000); // Change every 5 seconds
-
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [adImages.length]);
+  // ⛔️ Don’t render anything if user is subscribed
+  if (!showAd) return null;
 
   return (
     <div className="relative w-full h-40 md:h-48 lg:h-56 overflow-hidden mt-8">

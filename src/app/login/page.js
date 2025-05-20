@@ -37,12 +37,16 @@ export default function LoginPage() {
       }
   
       if (res.ok && data.token) {
+        console.log("🔍 FULL RESPONSE from backend:", data); // ✅ Add here
+
         // ✅ Successful login
         localStorage.setItem('token', data.token);
         localStorage.setItem('name', data.name);
         localStorage.setItem('email', formData.email);
         localStorage.setItem('role', data.role.toLowerCase());
         localStorage.setItem('userId', data.userId);
+        localStorage.setItem("isSubscribed", data.isSubscribed === true ? "true" : "false");
+
   
         window.dispatchEvent(new Event('userLoggedIn'));
         router.push('/');
